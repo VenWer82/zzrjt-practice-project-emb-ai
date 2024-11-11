@@ -18,15 +18,14 @@ def sent_analyzer():
     '''
     try:
       text_to_analyze = request.args.get('textToAnalyze')
-      if text_to_analyze is None:
-          return {'message': 'Missing paramater'}, 400
-
-      result = sentiment_analyzer(text_to_analyze)   
+      result = sentiment_analyzer(text_to_analyze) 
+      if result is None:
+          return 'Invalid text input, try again'
+    
       label = result['label']
       score = result['score']
       return f'The analyzed text is of sentiment {label}, and the score is {score}'
     except Exception as e:
-        print(e, text_to_analyze)
         return {'message': 'Internal server error'}, 500
 
 @app.route("/")
