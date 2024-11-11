@@ -17,15 +17,16 @@ def sent_analyzer():
         score for the provided text.
     '''
     try:
-      text_to_analyze = request.args.get('textToAnalyze')
-      result = sentiment_analyzer(text_to_analyze) 
-      label = result['label']
-      score = result['score']
-      if label is None:
-          return 'Invalid text input, try again'
-        
-      return f'The analyzed text is of sentiment {label}, and the score is {score}'
-    except Exception as e:
+        text_to_analyze = request.args.get('textToAnalyze')
+        if not text_to_analyze:
+            return "Empty Field, Try again"
+        result = sentiment_analyzer(text_to_analyze)
+        label = result['label']
+        score = result['score']
+        if label is None:
+            return 'Invalid text input, try again'
+        return f'The analyzed text is of sentiment {label}, and the score is {score}'
+    except Exception:
         return {'message': 'Internal server error'}, 500
 
 @app.route("/")
@@ -36,6 +37,4 @@ def render_index_page():
     return render_template('index.html')
 
 if __name__ == "__main__":
-    ''' This functions executes the flask app and deploys it on localhost:5000
-    '''
     app.run(host='0.0.0.0',port=5000, debug=True)
